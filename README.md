@@ -90,6 +90,62 @@ A migration é a forma como o Django armazena as mudanças nos modelos - ou seja
 ```
 $ python manage.py sqlmigrate polls 0001
 ```
+O output é:
 
+```
+BEGIN;
+--
+-- Create model Question
+--
+CREATE TABLE "polls_question" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "question_text" varchar(200) NOT NULL,
+    "pub_date" timestamp with time zone NOT NULL
+);
+--
+-- Create model Choice
+--
+CREATE TABLE "polls_choice" (
+    "id" serial NOT NULL PRIMARY KEY,
+    "choice_text" varchar(200) NOT NULL,
+    "votes" integer NOT NULL,
+    "question_id" integer NOT NULL
+);
+ALTER TABLE "polls_choice"
+  ADD CONSTRAINT "polls_choice_question_id_c5b4b260_fk_polls_question_id"
+    FOREIGN KEY ("question_id")
+    REFERENCES "polls_question" ("id")
+    DEFERRABLE INITIALLY DEFERRED;
+CREATE INDEX "polls_choice_question_id_c5b4b260" ON "polls_choice" ("question_id");
 
+COMMIT;
+```
+
+Observações:
+- Nomes de tabelas são gerados combinando o nome do app (polls) com o nome do modelo (question e choice).
+- Primary keys são adicionadas automaticamente.
+- "_id" é adicionado no fim do nome da foreign key.
+- O código SQL não foi executado, só mostrado.
+
+4) Caso queira, o comando 
+
+```
+python manage.py check
+```
+
+pode ser executado. Sua função é checar se há algum problema no projeto. Todos os apps são checados.
+
+5) Para criar as tabelas dos models no banco de dados (rodar o código SQL) execute o seguinte comando:
+
+```
+python manage.py migrate
+```
+
+O comando migrate executa todas as migrations que ainda não foram executadas. Ou seja, as mudanças feitas nos models são aplicadas e adicionadas ao banco de dados.
+
+Portanto, as 3 etapas de interação com o banco de dados são:
+
+- Mudar os models no models.py
+- Criar migrations (pré-código SQL) com python manage.py makemigrations
+- Aplicar mudanças no banco de dados (executar o código SQL) com python manage.py migrate
 
