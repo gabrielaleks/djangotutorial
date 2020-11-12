@@ -1,7 +1,7 @@
 Imagens do resultado final:
 
 ![imagem1](/imagens/1.png) 
-O diretório da aplicação é mostrado à direita e abaixo, no terminal, está sendo startado o servidor de desenvolvimento
+O diretório da aplicação é mostrado à esquerda e abaixo, no terminal, está sendo startado o servidor de desenvolvimento
 
 ![imagem1](/imagens/2.png) 
 /polls com 3 perguntas
